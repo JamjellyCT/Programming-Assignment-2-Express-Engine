@@ -27,3 +27,16 @@ Tested finding top value of stack. Tested edge case of finding top of an empty s
 Tested if finding size and if stack empty works.
 **Fixed or Improved**
 Proved that ArrayStack implementation works as intended.
+
+
+### Session 3
+**Date:** 2026-03-22
+**Task worked on:**
+Implemented Tokenizer
+**Bugs or Issues**
+Difficulty splitting multiple digit numbers. Example "33 * 4 + 2". The vector would've been 3 3 * 4 + 2 instead of 33 * 4 + 2.
+**Tests**
+Tested implementation of Tokenizer. Tokenizer correctly splits characters into valid tokens.
+**Fixed or Improved**
+Instead of using a for loop to create tokens, included sstream to read string and getline to split
+the string for me. Way easier and less of a headache. This also fixed the issue of splitting multi digit numbers.
