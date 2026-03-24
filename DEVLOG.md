@@ -52,3 +52,19 @@ Switch cases weren't working how I intended.
 Implementation simple enough where it looks bout right. Will test when I know how the function is going to be used.
 **Fixed or Improved**
 Was blank before. Added coded yippe! Used if-else statements rather than switch cases.
+
+
+### Session 5
+**Date:** 2026-03-24
+**Task worked on:**
+Implemented isValidPostfix function. Very messy but what can you do when you're flying blind.
+**Bugs or Issues**
+Vector had two elements but my test printed empty list.
+**Tests**
+Tested if it correctly identified if a postfix was valid.
+The first two elements are numbers
+Last element is an operator
+For every number there are number - 1 operators.
+**Fixed or Improved**
+The issue was the if statement that checked if the list was empty also checked if the size was less than or equal to 2.
+Made sure the print statement included that it's empty or size is not big enough.

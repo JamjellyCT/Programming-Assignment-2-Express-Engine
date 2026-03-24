@@ -6,6 +6,8 @@
 
 //Easily tokenize using this :D
 #include <sstream>
+//Check if string is digit
+#include <bits/stdc++.h>
 
 #include "ArrayStack.h"
 
@@ -55,6 +57,19 @@ bool isOperator(const string& s) {
     return s == "+" || s == "-" || s == "*" || s == "/";
 }
 
+
+bool isDigit(const string& s) {
+
+    for (char c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 /*
  *Specifies order of operations.
  *Operations wit higher precedence are evaluated before those with lower.
@@ -95,7 +110,46 @@ int precedence(const string& op) {
 
 bool isValidPostfix(const vector<Token>& tokens) {
     // TODO
-    return false;
+    //list empty
+    if (tokens.empty() || tokens.size() <= 2) {
+        cout << "Empty vector or only 2 elements" << endl;
+        return false;
+    }
+
+    //checks first two elements are numbers
+    if (!(isDigit(tokens[0].value) && isDigit(tokens[1].value))) {
+        cout << "First two elements are not numbers" << endl;
+        return false;
+    }
+
+    int opCount = 0;
+    int numCount = 2;
+
+    for (int i = 2; i < tokens.size(); i++) {
+        if (i == tokens.size() - 1 && !isOperator(tokens[i].value)) {
+            cout << "Last element is not an operator" << endl;
+            return false;
+        }
+        else if (isDigit(tokens[i].value)) {
+            numCount++;
+        }
+        else if (isOperator(tokens[i].value)) {
+            opCount++;
+        }
+        else {
+            //not a digit or operator
+            cout << "Vector contains element that is not a digit or operator" << endl;
+            return false;
+        }
+    }
+
+    if (numCount - opCount == 1) {
+        return true;
+    }
+    else {
+        cout << "numCount - operatorCount is not equal to 1" << endl;
+        return false;
+    }
 }
 
 bool isValidInfix(const vector<Token>& tokens) {
@@ -182,15 +236,18 @@ int main() {
     // myStack.push(10);
     // myStack.push(20);
 
-    //Tokenizer test
-    // string toky = "3 + 4 * 2";
-    // string toky2 = "333 44 22 * +";
-    //
-    // tokenize(toky);
-    //
-    // cout << endl;
-    //
-    // tokenize(toky2);
+    //Tokenizer test, validPostfix test
+    //string toky = "3 + 4 * 2";
+    string toky2 = "333 44 + - 22";
+
+    //vector<Token> tokens = tokenize(toky);
+    vector<Token> tokenz = tokenize(toky2);
+    cout << endl;
+
+    // 0 false, 1 true
+    //cout << "Valid Postfix: " << isValidPostfix(tokens) << endl;
+    cout << "Valid Postfix: " << isValidPostfix(tokenz) << endl;
+
 
 
     return 0;
