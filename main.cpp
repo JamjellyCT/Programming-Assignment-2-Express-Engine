@@ -42,9 +42,9 @@ vector<Token> tokenize(const string& line) {
     // }
 
     //test
-    for (int i = 0; i < tokens.size(); i++) {
-        cout << tokens[i].value << endl;
-    }
+    // for (int i = 0; i < tokens.size(); i++) {
+    //     cout << tokens[i].value << endl;
+    // }
 
     return tokens;
 }
@@ -55,10 +55,40 @@ bool isOperator(const string& s) {
     return s == "+" || s == "-" || s == "*" || s == "/";
 }
 
-
+/*
+ *Specifies order of operations.
+ *Operations wit higher precedence are evaluated before those with lower.
+ *If equal, read from left to right
+*/
 int precedence(const string& op) {
     // TODO
-    return 0;
+
+    //old implementation
+    // switch (op) {
+    //     case "+":
+    //     case "-":
+    //         return 1;
+    //     case "*":
+    //     case "/":
+    //         return 2;
+    //     case "(":
+    //     case ")":
+    //         return 3;
+    // }
+
+    if (isOperator(op)) {
+        if (op == "+" || op == "-") {
+            return 1;
+        }
+        else if (op == "*" || op == "/") {
+            return 2;
+        }
+    }
+    else {
+        return 0; //Not operator if precedence 0
+    }
+
+
 }
 
 // Detection
@@ -153,14 +183,14 @@ int main() {
     // myStack.push(20);
 
     //Tokenizer test
-    string toky = "3 + 4 * 2";
-    string toky2 = "333 44 22 * +";
-
-    tokenize(toky);
-
-    cout << endl;
-
-    tokenize(toky2);
+    // string toky = "3 + 4 * 2";
+    // string toky2 = "333 44 22 * +";
+    //
+    // tokenize(toky);
+    //
+    // cout << endl;
+    //
+    // tokenize(toky2);
 
 
     return 0;

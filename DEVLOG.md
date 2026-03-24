@@ -40,3 +40,15 @@ Tested implementation of Tokenizer. Tokenizer correctly splits characters into v
 **Fixed or Improved**
 Instead of using a for loop to create tokens, included sstream to read string and getline to split
 the string for me. Way easier and less of a headache. This also fixed the issue of splitting multi digit numbers.
+
+
+### Session 4
+**Date:** 2026-03-23
+**Task worked on:**
+Implemented Precedence function
+**Bugs or Issues**
+Switch cases weren't working how I intended.
+**Tests**
+Implementation simple enough where it looks bout right. Will test when I know how the function is going to be used.
+**Fixed or Improved**
+Was blank before. Added coded yippe! Used if-else statements rather than switch cases.
