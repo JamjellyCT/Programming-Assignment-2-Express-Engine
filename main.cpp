@@ -178,8 +178,21 @@ bool isValidInfix(const vector<Token>& tokens) {
             bracketcount++;
         }
         else if (tokens[i].value == ")") {
+            //num expected
+            if (operatorExpected == false) {
+                cout << "num expected not )" << endl;
+                return false;
+            }
+
+
+            //no opening bracket exist to pair closing bracket
+            if (bracketcount == 0) {
+                cout << "no ( to pair ) with." << endl;
+                return false;
+            }
+
             bracketcount--;
-            operatorExpected = true;
+            //operatorExpected = false;
         }
         else if (isDigit(tokens[i].value) && !operatorExpected) {
             operatorExpected = true;
@@ -286,7 +299,8 @@ int main() {
     // myStack.push(20);
 
     //Tokenizer test, validPostfix test
-    string toky = "( 3 + 5 ) * 4";
+    //make sure string is correctly formated with the spaces, " 3 + 4" will not tokenize correctly
+    string toky = "( 3 + 4 ) ) ( + 4";
     //string toky2 = "333 44 +";
 
     vector<Token> tokens = tokenize(toky);
@@ -297,6 +311,14 @@ int main() {
     cout << "Valid Infix: " << isValidInfix(tokens) << endl;
     //cout << "Valid Postfix: " << isValidPostfix(tokenz) << endl;
 
+    /*
+     * Incorrect Infix result
+     * ( 3 + ) + 4 falsely returns true, fixed
+     * ( 3 + 4 ) 4 falsely returns false
+     * ( 3 + 4 ) ) ( + 4 falsely returns true, fixed
+     * 3 + 4 ( ) empty parenthesis, falsely returns true
+     *
+     */
 
 
     return 0;
