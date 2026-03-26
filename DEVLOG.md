@@ -68,3 +68,17 @@ For every number there are number - 1 operators.
 **Fixed or Improved**
 The issue was the if statement that checked if the list was empty also checked if the size was less than or equal to 2.
 Made sure the print statement included that it's empty or size is not big enough.
+
+### Session 6
+**Date:** 2026-03-25
+**Task worked on:**
+Implemented isValidInfix function. This fried my brain. Like am I doing this right :c. insert crying emoji.
+**Bugs or Issues**
+A lot of issues. Infix doesn't keep track of empty parenthesis, expressions like ( 3 + 5 ) * 4 
+and (3 + 5) 4 are the same but I haven't added logic to account for this yet so it's falsely saying invalid.
+Another issue for parenthesis balance is things like ( 3 + 4 ) ) ( * 2 is falsely said as valid.
+**Tests**
+Tested the simple 3 + 4 and stuff like (3 + 4) * 3, and they work as intended.
+**Fixed or Improved**
+I did not fix it yet. My brain is too fried to continue working so have some mercy please.
+

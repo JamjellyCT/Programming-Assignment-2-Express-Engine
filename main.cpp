@@ -7,7 +7,7 @@
 //Easily tokenize using this :D
 #include <sstream>
 //Check if string is digit
-#include <bits/stdc++.h>
+#include <cctype>
 
 #include "ArrayStack.h"
 
@@ -44,9 +44,9 @@ vector<Token> tokenize(const string& line) {
     // }
 
     //test
-    // for (int i = 0; i < tokens.size(); i++) {
-    //     cout << tokens[i].value << endl;
-    // }
+    for (int i = 0; i < tokens.size(); i++) {
+        cout << tokens[i].value << endl;
+    }
 
     return tokens;
 }
@@ -154,7 +154,56 @@ bool isValidPostfix(const vector<Token>& tokens) {
 
 bool isValidInfix(const vector<Token>& tokens) {
     // TODO
-    return false;
+    //Parentheses balance counter
+    int bracketcount = 0;
+
+    //checks
+    bool operatorExpected = false;
+    //bool numExpected = true;
+
+
+    if (tokens.empty()) {
+        cout << "List empty" << endl;
+        return false;
+    }
+
+    if (isOperator(tokens[0].value)) {
+        cout << "Infix cannot start with an operator" << endl;
+        return false;
+    }
+
+    for (int i = 0; i < tokens.size(); i++) {
+
+        if (tokens[i].value == "(") {
+            bracketcount++;
+        }
+        else if (tokens[i].value == ")") {
+            bracketcount--;
+            operatorExpected = true;
+        }
+        else if (isDigit(tokens[i].value) && !operatorExpected) {
+            operatorExpected = true;
+        }
+        else if (isDigit(tokens[i].value) && operatorExpected) {
+            //back to back numbers
+            cout << "Number not expected, index: " << i <<  endl;
+            return false;
+        }
+        else if (isOperator(tokens[i].value) && operatorExpected) {
+            operatorExpected = false;
+        }
+        else if (isOperator(tokens[i].value) && !operatorExpected) {
+            cout << "Operator not expected" << endl;
+            return false;
+        }
+    }
+
+    if (bracketcount != 0) {
+        cout << "Brackets not balanced" << endl;
+        return false;
+    }
+
+    return true;
 }
 
 // Conversion
@@ -237,16 +286,16 @@ int main() {
     // myStack.push(20);
 
     //Tokenizer test, validPostfix test
-    //string toky = "3 + 4 * 2";
-    string toky2 = "333 44 + - 22";
+    string toky = "( 3 + 5 ) * 4";
+    //string toky2 = "333 44 +";
 
-    //vector<Token> tokens = tokenize(toky);
-    vector<Token> tokenz = tokenize(toky2);
+    vector<Token> tokens = tokenize(toky);
+    //vector<Token> tokenz = tokenize(toky2);
     cout << endl;
 
     // 0 false, 1 true
-    //cout << "Valid Postfix: " << isValidPostfix(tokens) << endl;
-    cout << "Valid Postfix: " << isValidPostfix(tokenz) << endl;
+    cout << "Valid Infix: " << isValidInfix(tokens) << endl;
+    //cout << "Valid Postfix: " << isValidPostfix(tokenz) << endl;
 
 
 
