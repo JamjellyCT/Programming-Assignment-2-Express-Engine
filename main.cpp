@@ -231,6 +231,49 @@ bool isValidInfix(const vector<Token>& tokens) {
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
     // TODO
+    ArrayStack<string> stack;
+    string postfix = "";
+
+    for (int i = 0; i < tokens.size(); i++) {
+        if (isDigit(tokens[i].value)) {
+            postfix = postfix + tokens[i].value + " ";
+        }
+        else if (tokens[i].value == "(") {
+            //push ( to stack
+            stack.push(tokens[i].value);
+        }
+        else if (tokens[i].value == ")") {
+            while (!stack.empty() && stack.top() != "(") {
+                postfix = postfix + stack.top() + " ";
+                stack.pop();
+            }
+            stack.pop();
+        }
+        else {
+            //if operator
+            while (!stack.empty() && stack.top() != "(" && (precedence(stack.top()) > precedence(tokens[i].value)
+                || precedence(stack.top()) == precedence(tokens[i].value))) {
+                postfix = postfix + stack.top() + " ";
+                stack.pop();
+            }
+            stack.push(tokens[i].value);
+        }
+    }
+
+    while (!stack.empty()) {
+        if (stack.size() == 1) {
+            postfix = postfix + stack.top();
+        }
+        else {
+            postfix = postfix + stack.top() + " ";
+        }
+        stack.pop();
+    }
+
+    cout << postfix << endl;
+
+    output = tokenize(postfix);
+
     return output;
 }
 
@@ -307,15 +350,15 @@ int main() {
 
     //Tokenizer test, validPostfix test
     //make sure string is correctly formated with the spaces, " 3 + 4" will not tokenize correctly
-    string toky = "3 ( ( 3 + 2 ) * 3 )";
-    //string toky2 = "333 44 +";
+    string toky = "( 3 + 2 ) + 5 * 2";
+    //string toky2 = "+ + +";
 
     vector<Token> tokens = tokenize(toky);
     //vector<Token> tokenz = tokenize(toky2);
-    cout << endl;
+    //cout << endl;
 
     // 0 false, 1 true
-    cout << "Valid Infix: " << isValidInfix(tokens) << endl;
+    //cout << "Valid Infix: " << isValidInfix(tokens) << endl;
     //cout << "Valid Postfix: " << isValidPostfix(tokenz) << endl;
 
     /*
@@ -327,6 +370,18 @@ int main() {
      * 3 ( ) + 4 falsely returns true, fixed
      */
 
+
+
+    /*
+     *Incorrect postfix to infix result
+     *  ( 3 + 2 ) + 5 * 2"
+     *  ( 3 + 2 )
+     */
+
+
+    vector<Token> newTok = infixToPostfix(tokens);
+
+    cout << "Valid Postfix: " << isValidPostfix(newTok) << endl;
 
     return 0;
 }

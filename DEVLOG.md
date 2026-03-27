@@ -106,3 +106,18 @@ Regarding the isValidInfix function, none that I can think of or see.
 Tested implied multiplication using parenthesis.
 **Fixed or Improved**
 Fixed issues like implied multiplication 3 ( 4 + 5 ) and (3 + 4) 5 all pass as intended.
+
+
+### Session 9
+**Date:** 2026-03-27
+**Task worked on:**
+Implemented infixToPostfix() function
+**Bugs or Issues**
+Operators weren't showing on postfix correctly. Result would look like 3 4 2 instead of 3 4 2 * +.
+Closing parenthesis ), kept showing up within the postfix.
+**Tests**
+Tested infixToPostfix function. Now working as intended.
+**Fixed or Improved**
+Fixed issues such as operators not showing on postfix, as I forgot to pop them from the stack.
+Fixed issue with parenthesis showing up in postfix, put tokens value instead of the value of top
+into postfix.
