@@ -93,3 +93,16 @@ Tested bracket balancing and other parenthesis issues like )( passing as valid.
 **Fixed or Improved**
 Fixed issues such as )( and issues like (3 + ) + 4 passing as true when they are false.
 Still needs improvements in other edgecases.
+
+
+
+### Session 8
+**Date:** 2026-03-26
+**Task worked on:**
+isValidInfix() function implementation. I took a lil break. This session the same day as 6.
+**Bugs or Issues**
+Regarding the isValidInfix function, none that I can think of or see.
+**Tests**
+Tested implied multiplication using parenthesis.
+**Fixed or Improved**
+Fixed issues like implied multiplication 3 ( 4 + 5 ) and (3 + 4) 5 all pass as intended.
