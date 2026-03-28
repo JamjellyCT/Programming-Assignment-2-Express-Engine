@@ -13,24 +13,24 @@ public:
     void push(const T& value) {
         // TODO
         data.push_back(value);
-        std::cout << "Pushed value " << value << std::endl;
+        //std::cout << "Pushed value " << value << std::endl;
     }
 
     void pop() {
         // TODO
         if (empty()) {
-            std::cout << "Stack is empty, stack underflow." << std::endl;
+            //std::cout << "Stack is empty, stack underflow." << std::endl;
             return;
         }
         T val = data.back();
         data.pop_back();
-        std::cout << "Popped " << val << std::endl;
+        //std::cout << "Popped " << val << std::endl;
     }
 
     T top() const {
         // TODO
         if (empty()) {
-            std::cout << "Stack is empty" << std::endl;
+            //std::cout << "Stack is empty" << std::endl;
             return T();
         }
         return data.back();

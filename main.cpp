@@ -19,6 +19,24 @@ struct Token {
     string value;   // number, operator, or parenthesis
 };
 
+
+//Helper
+bool isDigit(const string& s) {
+
+    for (char c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool isOperator(const string& s) {
+    return s == "+" || s == "-" || s == "*" || s == "/";
+}
+
 // Tokenizer
 
 vector<Token> tokenize(const string& line) {
@@ -32,6 +50,9 @@ vector<Token> tokenize(const string& line) {
     while (getline(ss,s, ' ')) {
         t.value = s;
         tokens.push_back(t);
+        // if (isDigit(s) || isOperator(s) || s == ")" || s == "(") {
+        //     tokens.push_back(t);
+        // }
     }
 
     //Old implementation
@@ -44,29 +65,11 @@ vector<Token> tokenize(const string& line) {
     // }
 
     //test
-    for (int i = 0; i < tokens.size(); i++) {
-        cout << tokens[i].value << endl;
-    }
+    // for (int i = 0; i < tokens.size(); i++) {
+    //     cout << tokens[i].value << endl;
+    // }
 
     return tokens;
-}
-
-// Helpers
-
-bool isOperator(const string& s) {
-    return s == "+" || s == "-" || s == "*" || s == "/";
-}
-
-
-bool isDigit(const string& s) {
-
-    for (char c : s) {
-        if (!isdigit(c)) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 
@@ -112,13 +115,13 @@ bool isValidPostfix(const vector<Token>& tokens) {
     // TODO
     //list empty
     if (tokens.empty() || tokens.size() <= 2) {
-        cout << "Empty vector or only 2 elements" << endl;
+        //cout << "Empty vector or only 2 elements" << endl;
         return false;
     }
 
     //checks first two elements are numbers
     if (!(isDigit(tokens[0].value) && isDigit(tokens[1].value))) {
-        cout << "First two elements are not numbers" << endl;
+        //cout << "First two elements are not numbers" << endl;
         return false;
     }
 
@@ -126,8 +129,14 @@ bool isValidPostfix(const vector<Token>& tokens) {
     int numCount = 2;
 
     for (int i = 2; i < tokens.size(); i++) {
+        if (!isDigit(tokens[i].value) && !isOperator(tokens[i].value) && tokens[i].value != ")"  && tokens[i].value != "(") {
+            cout << "Cano only contain num or op or parenthesis" << endl;
+            return false;
+        }
+
+
         if (i == tokens.size() - 1 && !isOperator(tokens[i].value)) {
-            cout << "Last element is not an operator" << endl;
+            //cout << "Last element is not an operator" << endl;
             return false;
         }
         else if (isDigit(tokens[i].value)) {
@@ -138,7 +147,7 @@ bool isValidPostfix(const vector<Token>& tokens) {
         }
         else {
             //not a digit or operator
-            cout << "Vector contains element that is not a digit or operator" << endl;
+            //cout << "Vector contains element that is not a digit or operator" << endl;
             return false;
         }
     }
@@ -147,7 +156,7 @@ bool isValidPostfix(const vector<Token>& tokens) {
         return true;
     }
     else {
-        cout << "numCount - operatorCount is not equal to 1" << endl;
+        //cout << "numCount - operatorCount is not equal to 1" << endl;
         return false;
     }
 }
@@ -162,17 +171,22 @@ bool isValidInfix(const vector<Token>& tokens) {
     //bool numExpected = true;
 
 
-    if (tokens.empty()) {
-        cout << "List empty" << endl;
+    if (tokens.empty() || tokens.size() <= 2) {
+        //cout << "List empty / Less than 2" << endl;
         return false;
     }
 
     if (isOperator(tokens[0].value)) {
-        cout << "Infix cannot start with an operator" << endl;
+        //cout << "Infix cannot start with an operator" << endl;
         return false;
     }
 
     for (int i = 0; i < tokens.size(); i++) {
+        if (!isDigit(tokens[i].value) && !isOperator(tokens[i].value) && tokens[i].value != ")"  && tokens[i].value != "(") {
+            cout << "Cano only contain num or op or parenthesis" << endl;
+            return false;
+        }
+
 
         if (tokens[i].value == "(") {
             bracketcount++;
@@ -181,14 +195,14 @@ bool isValidInfix(const vector<Token>& tokens) {
         else if (tokens[i].value == ")") {
             //num expected
             if (operatorExpected == false) {
-                cout << "num expected not )" << endl;
+                //cout << "num expected not )" << endl;
                 return false;
             }
 
 
             //no opening bracket exist to pair closing bracket
             if (bracketcount == 0) {
-                cout << "no ( to pair ) with." << endl;
+                //cout << "no ( to pair ) with." << endl;
                 return false;
             }
 
@@ -205,7 +219,7 @@ bool isValidInfix(const vector<Token>& tokens) {
             }
             else {
                 //back to back numbers
-                cout << "Number not expected, index: " << i <<  endl;
+                //cout << "Number not expected, index: " << i <<  endl;
                 return false;
             }
         }
@@ -213,13 +227,13 @@ bool isValidInfix(const vector<Token>& tokens) {
             operatorExpected = false;
         }
         else if (isOperator(tokens[i].value) && !operatorExpected) {
-            cout << "Operator not expected" << endl;
+            //cout << "Operator not expected" << endl;
             return false;
         }
     }
 
     if (bracketcount != 0) {
-        cout << "Brackets not balanced" << endl;
+        //cout << "Brackets not balanced" << endl;
         return false;
     }
 
@@ -231,6 +245,9 @@ bool isValidInfix(const vector<Token>& tokens) {
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
     // TODO
+
+
+
     ArrayStack<string> stack;
     string postfix = "";
 
@@ -240,7 +257,12 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
         }
         else if (tokens[i].value == "(") {
             //push ( to stack
-            stack.push(tokens[i].value);
+            if (i != 0 && isDigit(tokens[i - 1].value)) {
+                stack.push("*");
+            }
+            else {
+                stack.push(tokens[i].value);
+            }
         }
         else if (tokens[i].value == ")") {
             while (!stack.empty() && stack.top() != "(") {
@@ -248,6 +270,9 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
                 stack.pop();
             }
             stack.pop();
+            if (i != tokens.size() - 1  && isDigit(tokens[i + 1].value)) {
+                stack.push("*");
+            }
         }
         else {
             //if operator
@@ -270,7 +295,7 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
         stack.pop();
     }
 
-    cout << postfix << endl;
+    //cout << postfix << endl;
 
     output = tokenize(postfix);
 
@@ -282,36 +307,72 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
 double evalPostfix(const vector<Token>& tokens) {
     ArrayStack<double> stack;
     // TODO
-    return 0.0;
+    for (int i = 0; i < tokens.size(); i++) {
+
+        if (isDigit(tokens[i].value)) {
+            //string to num
+            double num;
+            stringstream(tokens[i].value) >> num;
+
+            //push num to stack
+            stack.push(num);
+        }
+        else {
+            double operand2 = stack.top();
+            stack.pop();
+            double operand1 = stack.top();
+            stack.pop();
+
+            if (tokens[i].value == "+") {
+                stack.push(operand1 + operand2);
+            }
+            else if (tokens[i].value == "-") {
+                stack.push(operand1 - operand2);
+            }
+            else if (tokens[i].value == "*") {
+                stack.push(operand1 * operand2);
+            }
+            else if (tokens[i].value == "/") {
+                stack.push(operand1 / operand2);
+            }
+        }
+    }
+
+    return stack.top();
 }
 
 // Main
 
 int main() {
-    // string line;
-    // getline(cin, line);
-    //
-    // vector<Token> tokens = tokenize(line);
-    //
-    // if (isValidPostfix(tokens)) {
-    //     cout << "FORMAT: POSTFIX\n";
-    //     cout << "RESULT: " << evalPostfix(tokens) << "\n";
-    // }
-    // else if (isValidInfix(tokens)) {
-    //     vector<Token> postfix = infixToPostfix(tokens);
-    //     cout << "FORMAT: INFIX\n";
-    //     cout << "POSTFIX: ";
-    //     for (const auto& t : postfix) {
-    //         cout << t.value << " ";
-    //     }
-    //     cout << "\n";
-    //     cout << "RESULT: " << evalPostfix(postfix) << "\n";
-    // }
-    // else {
-    //     cout << "FORMAT: NEITHER\n";
-    //     cout << "ERROR: invalid expression\n";
-    // }
+    string line;
+    getline(cin, line);
 
+    vector<Token> tokens = tokenize(line);
+
+    if (isValidPostfix(tokens)) {
+        cout << "FORMAT: POSTFIX\n";
+        cout << "RESULT: " << evalPostfix(tokens) << "\n";
+    }
+    else if (isValidInfix(tokens)) {
+        vector<Token> postfix = infixToPostfix(tokens);
+        cout << "FORMAT: INFIX\n";
+        cout << "POSTFIX: ";
+        for (const auto& t : postfix) {
+            cout << t.value << " ";
+        }
+        cout << "\n";
+        cout << "RESULT: " << evalPostfix(postfix) << "\n";
+    }
+    else {
+        cout << "FORMAT: NEITHER\n";
+        cout << "ERROR: invalid expression\n";
+    }
+
+
+    /*
+     *3 - 2 * ( 4 + 2 ) Result 9 supposed to be -9 fixed
+     *2 - 4 Result 2 supposed to be -2 fixed
+     */
 
     //Manual Test
     // ArrayStack<int> myStack;
@@ -350,10 +411,10 @@ int main() {
 
     //Tokenizer test, validPostfix test
     //make sure string is correctly formated with the spaces, " 3 + 4" will not tokenize correctly
-    string toky = "( 3 + 2 ) + 5 * 2";
+    //string toky = "( 4 + 2 ) * 3 + 2";
     //string toky2 = "+ + +";
 
-    vector<Token> tokens = tokenize(toky);
+    //vector<Token> tokens = tokenize(toky);
     //vector<Token> tokenz = tokenize(toky2);
     //cout << endl;
 
@@ -379,9 +440,9 @@ int main() {
      */
 
 
-    vector<Token> newTok = infixToPostfix(tokens);
+    //vector<Token> newTok = infixToPostfix(tokens);
 
-    cout << "Valid Postfix: " << isValidPostfix(newTok) << endl;
-
+    //cout << "Valid Postfix: " << isValidPostfix(newTok) << endl;
+    //cout << "RESULT: " << evalPostfix(newTok) << endl;
     return 0;
 }

@@ -121,3 +121,17 @@ Tested infixToPostfix function. Now working as intended.
 Fixed issues such as operators not showing on postfix, as I forgot to pop them from the stack.
 Fixed issue with parenthesis showing up in postfix, put tokens value instead of the value of top
 into postfix.
+
+### Session 10
+**Date:** 2026-03-28
+**Task worked on:**
+Implemented evalPostfix() function
+**Bugs or Issues**
+Expressions such as 2 - 4 kept resulting in positive results such as 2.
+Expressions such as 3 + e 2 were legal when they aren't valid.
+**Tests**
+Tested evalPostfix() function.
+**Fixed or Improved**
+Fixed expressions 3 + e 2 returning as a valid infix.
+Fixed expressions such as 2 - 4 returning as postive by switching op2 - op1 to op1 - op2.
+evalPostfix() function seems to be working as intended but more testing will be done.
