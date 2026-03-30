@@ -23,6 +23,10 @@ struct Token {
 //Helper
 bool isDigit(const string& s) {
 
+    if (s.empty()) {
+        return false;
+    }
+
     for (char c : s) {
         if (!isdigit(c)) {
             return false;
@@ -43,17 +47,41 @@ vector<Token> tokenize(const string& line) {
     vector<Token> tokens;
     // TODO
     // Ex string: 3 + 4 * 2 or 3 4 2 * +
-    stringstream ss(line);
-    string s;
+    //stringstream ss(line);
+    //string s;
     Token t;
+    int i = 0;
 
-    while (getline(ss,s, ' ')) {
-        t.value = s;
-        tokens.push_back(t);
-        // if (isDigit(s) || isOperator(s) || s == ")" || s == "(") {
-        //     tokens.push_back(t);
-        // }
+    while (i < line.size()) {
+        if (line[i] == ' ') {
+            i++;
+        }
+        else if (isdigit(line[i])) {
+            string num = "";
+
+            while ( i < line.size() && isdigit(line[i])) {
+                num+= line[i];
+                i++;
+            }
+            t.value = num;
+            tokens.push_back(t);
+
+        }
+        else {
+            t.value = line[i];
+            tokens.push_back(t);
+            i++;
+        }
     }
+
+
+    // while (getline(ss,s, ' ')) {
+    //     t.value = s;
+    //     tokens.push_back(t);
+    //     // if (isDigit(s) || isOperator(s) || s == ")" || s == "(") {
+    //     //     tokens.push_back(t);
+    //     // }
+    // }
 
     //Old implementation
     //int length = line.length();
@@ -65,9 +93,9 @@ vector<Token> tokenize(const string& line) {
     // }
 
     //test
-    // for (int i = 0; i < tokens.size(); i++) {
-    //     cout << tokens[i].value << endl;
-    // }
+    for (int i = 0; i < tokens.size(); i++) {
+        cout << tokens[i].value << endl;
+    }
 
     return tokens;
 }
@@ -102,9 +130,8 @@ int precedence(const string& op) {
             return 2;
         }
     }
-    else {
-        return 0; //Not operator if precedence 0
-    }
+
+    return 0; //Not operator if precedence 0
 
 
 }
@@ -130,7 +157,7 @@ bool isValidPostfix(const vector<Token>& tokens) {
 
     for (int i = 2; i < tokens.size(); i++) {
         if (!isDigit(tokens[i].value) && !isOperator(tokens[i].value) && tokens[i].value != ")"  && tokens[i].value != "(") {
-            cout << "Cano only contain num or op or parenthesis" << endl;
+           // cout << "Can only contain num or op or parenthesis" << endl;
             return false;
         }
 
@@ -183,7 +210,7 @@ bool isValidInfix(const vector<Token>& tokens) {
 
     for (int i = 0; i < tokens.size(); i++) {
         if (!isDigit(tokens[i].value) && !isOperator(tokens[i].value) && tokens[i].value != ")"  && tokens[i].value != "(") {
-            cout << "Cano only contain num or op or parenthesis" << endl;
+            //cout << "Can only contain num or op or parenthesis" << endl;
             return false;
         }
 
@@ -234,6 +261,11 @@ bool isValidInfix(const vector<Token>& tokens) {
 
     if (bracketcount != 0) {
         //cout << "Brackets not balanced" << endl;
+        return false;
+    }
+
+    if (!operatorExpected) {
+        //ends on operator
         return false;
     }
 
@@ -370,8 +402,13 @@ int main() {
 
 
     /*
+     * Incorrect Results
      *3 - 2 * ( 4 + 2 ) Result 9 supposed to be -9 fixed
      *2 - 4 Result 2 supposed to be -2 fixed
+     *(3 + 4) fixed
+     *3 +  4 fixed
+     *(3)(3) + 2
+     *3 + 4 + fixed
      */
 
     //Manual Test

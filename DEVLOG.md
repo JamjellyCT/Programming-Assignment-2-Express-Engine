@@ -135,3 +135,18 @@ Tested evalPostfix() function.
 Fixed expressions 3 + e 2 returning as a valid infix.
 Fixed expressions such as 2 - 4 returning as postive by switching op2 - op1 to op1 - op2.
 evalPostfix() function seems to be working as intended but more testing will be done.
+
+### Session 11
+**Date:** 2026-03-29
+**Task worked on:**
+Reimplemented tokenizer
+**Bugs or Issues**
+Tokenizer using ss stream would lump (3 + 4) as (3, +, and 4) as tokens 
+when it should be (,3,+,4,). 
+**Tests**
+Tested new tokenizer to see if it still works as intended. 
+It can now catch probles like (3+4) as a valud expression even without spaces.
+**Fixed or Improved**
+Improved tokenizer to catch expressions like (3+4) that aren't separated by spaces.
+Though there is a problem I didn't notice with implicit multiplication and that is (3)(3) is not being
+recognized properly.
