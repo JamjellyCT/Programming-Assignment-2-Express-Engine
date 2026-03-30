@@ -150,3 +150,16 @@ It can now catch probles like (3+4) as a valud expression even without spaces.
 Improved tokenizer to catch expressions like (3+4) that aren't separated by spaces.
 Though there is a problem I didn't notice with implicit multiplication and that is (3)(3) is not being
 recognized properly.
+
+
+### Session 12
+**Date:** 2026-03-30
+**Task worked on:**
+Reimplemented infixToPostfix, makes it go through the original tokens to spot any implicit multiplication first.
+**Bugs or Issues**
+(3)(3) wasn't being recognized as implicit multiplication
+**Tests**
+Tested (3)(3) and other implicit multiplication expressions.
+**Fixed or Improved**
+New infixToPostfix now recognizes (3)(3) as 3 * 3. The brain no longer works right now that needs improvement but 
+I think I am done?

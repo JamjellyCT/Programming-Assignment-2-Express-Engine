@@ -277,43 +277,49 @@ bool isValidInfix(const vector<Token>& tokens) {
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
     // TODO
+    vector<Token> expanded;
 
+    //check implicit multiplication first
 
+    for (int i = 0; i < tokens.size(); i++) {
+        expanded.push_back(tokens[i]);
+
+        if (i < tokens.size() - 1) {
+            if ( (isDigit(tokens[i].value) && tokens[i + 1].value == "(")
+                || (tokens[i].value == ")" && isDigit(tokens[i + 1].value))
+                || (tokens[i].value == ")" && tokens[i + 1].value == "(")) {
+                Token t;
+                t.value = "*";
+                expanded.push_back(t);
+            }
+        }
+    }
 
     ArrayStack<string> stack;
     string postfix = "";
 
-    for (int i = 0; i < tokens.size(); i++) {
-        if (isDigit(tokens[i].value)) {
-            postfix = postfix + tokens[i].value + " ";
+    for (int i = 0; i < expanded.size(); i++) {
+        if (isDigit(expanded[i].value)) {
+            postfix = postfix + expanded[i].value + " ";
         }
-        else if (tokens[i].value == "(") {
-            //push ( to stack
-            if (i != 0 && isDigit(tokens[i - 1].value)) {
-                stack.push("*");
-            }
-            else {
-                stack.push(tokens[i].value);
-            }
+        else if (expanded[i].value == "(") {
+            stack.push(expanded[i].value);
         }
-        else if (tokens[i].value == ")") {
+        else if (expanded[i].value == ")") {
             while (!stack.empty() && stack.top() != "(") {
                 postfix = postfix + stack.top() + " ";
                 stack.pop();
             }
             stack.pop();
-            if (i != tokens.size() - 1  && isDigit(tokens[i + 1].value)) {
-                stack.push("*");
-            }
         }
         else {
             //if operator
-            while (!stack.empty() && stack.top() != "(" && (precedence(stack.top()) > precedence(tokens[i].value)
-                || precedence(stack.top()) == precedence(tokens[i].value))) {
+            while (!stack.empty() && stack.top() != "(" && (precedence(stack.top()) > precedence(expanded[i].value)
+                || precedence(stack.top()) == precedence(expanded[i].value))) {
                 postfix = postfix + stack.top() + " ";
                 stack.pop();
             }
-            stack.push(tokens[i].value);
+            stack.push(expanded[i].value);
         }
     }
 
@@ -329,6 +335,7 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
 
     //cout << postfix << endl;
 
+    output = tokenize(postfix);
     output = tokenize(postfix);
 
     return output;
@@ -407,7 +414,7 @@ int main() {
      *2 - 4 Result 2 supposed to be -2 fixed
      *(3 + 4) fixed
      *3 +  4 fixed
-     *(3)(3) + 2
+     *(3)(3) + 2 fixed
      *3 + 4 + fixed
      */
 
